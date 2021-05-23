@@ -16,7 +16,7 @@ const filenames = process.argv.slice(2);
 //  检查import是否有大小写不匹配的
 filenames.forEach((filename) => {
   const code = fs.readFileSync(filename, 'utf-8');
-  const result = babel.parseSync(code);
+  const result = babel.parseSync(code, { presets: ['@babel/preset-react'] });
   if (!result) {
     return;
   }
@@ -31,12 +31,13 @@ filenames.forEach((filename) => {
       if (!sourceValue.startsWith('.')) {
         return;
       }
-      const absPath = path.resolve(path.dirname(filename), `${sourceValue}.js`);
+      const absPath = path.resolve(path.dirname(filename), sourceValue);
       const ext = path.extname(absPath);
       if (ext && !['.js', '.jsx', '.ts', '.tsx'].includes(ext)) {
         return;
       }
-      const isExisted = exists.sync(absPath);
+
+      const isExisted = exists.sync(absPath) || exists.sync(absPath + '.js');
       if (isExisted) {
         return;
       }
@@ -46,8 +47,10 @@ filenames.forEach((filename) => {
           list: [],
         };
       }
-      console.log(item.loc.start.line);
-      errorForFile.list.push({ line: item.loc.start.line, source: absPath });
+      errorForFile.list.push({
+        line: item.loc.start.line,
+        source: sourceValue,
+      });
     }
   });
   if (errorForFile) {
@@ -73,4 +76,4 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-process.exit();
+process.exit(0);

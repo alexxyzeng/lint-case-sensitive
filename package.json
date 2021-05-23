@@ -22,6 +22,7 @@
   "homepage": "https://github.com/alexxyzeng/lint-case-sensitive#readme",
   "dependencies": {
     "@babel/core": "^7.14.2",
+    "@babel/preset-react": "^7.13.13",
     "@babel/types": "^7.14.2",
     "@types/chalk": "^2.2.0",
     "chalk": "^4.1.1",
