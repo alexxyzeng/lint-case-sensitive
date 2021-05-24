@@ -58,7 +58,6 @@ filenames.forEach((filename) => {
 });
 
 if (errors.length > 0) {
-  // console.log(errors, '---- errors');
   errors.forEach(({ name, list }) => {
     console.log(chalk.underline.red(name));
     list.forEach((item) => {
